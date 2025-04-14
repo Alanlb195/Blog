@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+html {
+    scroll-behavior: smooth;
+}
+
+.blog h1 {
+    @apply text-3xl text-white my-5;
+}
+
+.blog h2 {
+    @apply text-2xl text-blue-500 my-5;
+}
+
+.blog h3 {
+    @apply text-xl text-white my-5;
+}
+
+.blog p {
+    @apply text-white my-5;
+}
+
+.blog a {
+    @apply text-blue-500 hover:underline;
+}
