@@ -1,0 +1,59 @@
+---
+import type { GetStaticPaths } from "astro";
+// Type GetStaticPaths de Astro
+import TypedBlogPost from "src/components/TypedBlogPost.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
+import { siteConfig } from "src/config/site-config";
+
+export const getStaticPaths = (async ({ paginate }) => {
+    const blogPosts = await getCollection("blog");
+
+    return paginate(blogPosts, { pageSize: 6 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+---
+
+<MainLayout>
+    <section class="max-w-6xl mx-auto">
+        <div class="px-6 py-10">
+            <h1
+                class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white"
+            >
+                {siteConfig.title}
+            </h1>
+
+            <button class="btn-primary mb-5">
+                <a href="/">Blog sin paginar</a>
+            </button>
+
+            <section aria-label="Entradas de blog">
+                <div
+                    class="grid grid-cols-1 gap-8 mt-4 md:mt-8 md:grid-cols-2 sm:grid-cols-2"
+                >
+                    {page.data.map((post) => <TypedBlogPost post={post} />)}
+                </div>
+            </section>
+
+            <section aria-label="Controles" class="flex justify-center mt-10">
+                <!--   page .. ?? prev   -->
+                <a
+                    href={page.url.prev}
+                    class:list={{
+                        "btn-primary mr-8": true,
+                        disabled: !page.url.prev,
+                    }}>Anteriores</a
+                >
+                <!--   page .. ?? next   -->
+                <a
+                    href={page.url.next}
+                    class:list={{
+                        "btn-primary": true,
+                        disabled: !page.url.next,
+                    }}>Siguientes</a
+                >
+            </section>
+        </div>
+    </section>
+</MainLayout>

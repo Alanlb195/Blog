@@ -4,6 +4,10 @@ html {
     scroll-behavior: smooth;
 }
 
+.btn-primary {
+    @apply text-white rounded-sm hover:cursor-pointer;
+}
+
 .blog h1 {
     @apply text-3xl text-white my-5;
 }
@@ -21,5 +25,5 @@ html {
 }
 
 .blog a {
-    @apply text-blue-500 hover:underline;
+    @apply text-blue-500 hover:text-white;
 }

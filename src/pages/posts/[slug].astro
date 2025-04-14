@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import MainLayout from "../../layouts/MainLayout.astro";
 import { Image } from "astro:assets";
 import { siteConfig } from "src/config/site-config";
+import { getEntry } from "astro:content";
 
 export const getStaticPaths = (async () => {
     const blogPosts = await getCollection("blog");
@@ -18,11 +19,15 @@ const { post } = Astro.props;
 const frontmatter = post.data;
 
 const { Content, headings } = await post.render();
+
+const author = (await getEntry("author", post.data.author.id))?.data;
+console.log(author);
 ---
 
 <MainLayout pageTitle={frontmatter.title}>
     <div
-        class="blog max-w-6xl mx-auto p-8 rounded-xl shadow-xl backdrop-blur-md space-y-6"
+        id="btn-goBack"
+        class="blog max-w-6xl mx-auto px-6 py-10"
     >
         <h1
             class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white"
@@ -30,16 +35,29 @@ const { Content, headings } = await post.render();
             {siteConfig.title}
         </h1>
 
-        <a
-            href="/"
-            id="btn-goBack"
-            class="inline-block no-underline text-blue-600 hover:text-blue-800 text-sm font-semibold py-2 px-4 rounded transition"
-        >
-            Regresar
-        </a>
+        <a class="py-3 rounded-sm" href="/">Regresar</a>
+
+        {
+            author && (
+                <div class="text-md text-gray-400 mt-12 flex flex-row">
+                    <Image
+                        src={author.avatar}
+                        alt={author.name}
+                        class="rounded-full"
+                        width={50}
+                        height={50}
+                    />
+                    <div class="flex flex-col ml-5">
+                        <a href={ `/blog/${frontmatter.author.id}` }>{author.name}</a>
+                        <span class="text-xs text-gray-200">
+                            {frontmatter.date}
+                        </span>
+                    </div>
+                </div>
+            )
+        }
 
         <h1 class="text-xs text-gray-500 mb-0">{frontmatter.title}</h1>
-        <h4 class="text-md text-gray-400 mb-0">{frontmatter.author}</h4>
 
         <!-- Image -->
         <Image
