@@ -21,7 +21,6 @@ const frontmatter = post.data;
 const { Content, headings } = await post.render();
 
 const author = (await getEntry("author", post.data.author.id))?.data;
-console.log(author);
 ---
 
 <MainLayout pageTitle={frontmatter.title}>
